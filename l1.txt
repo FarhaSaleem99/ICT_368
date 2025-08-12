@@ -1,0 +1,301 @@
+Lab 1
+Exercise 1
+1. Use CompanyDB, show dbs
+2. db.createCollection(“Employees”), show collections
+3. db.Employees.insertMany([
+{EmployeeId:201,Name:"Alice Brown",Department:"IT",Age:28,Salary:75000,HireDate:ISODate("2021-06-15T00:00:00Z"),Status:"Active"},
+{EmployeeId:202,Name:"Bob Smith",Department:"HR",Age:35,Salary:65000,HireDate:ISODate("2019-09-22T00:00:00Z"),Status:"Active"},
+{EmployeeId:203,Name:"Charlie Lee",Department:"IT",Age:40,Salary:85000,HireDate:ISODate("2018-04-10T00:00:00Z"),Status:"Resigned"},
+{EmployeeId:204,Name:"David Wong",Department:"Finance",Age:45,Salary:95000,HireDate:ISODate("2016-12-05T00:00:00Z"),Status:"Active"},
+{EmployeeId:205,Name:"Emma Johnson",Department:"IT",Age:29,Salary:72000,HireDate:ISODate("2020-02-18T00:00:00Z"),Status:"Active"},
+{EmployeeId:206,Name:"Frank Adams",Department:"Marketing",Age:38,Salary:68000,HireDate:ISODate("2017-07-30T00:00:00Z"),Status:"Resigned"},
+{EmployeeId:207,Name:"Grace White",Department:"HR",Age:31,Salary:70000,HireDate:ISODate("2019-10-10T00:00:00Z"),Status:"Active"},
+{EmployeeId:208,Name:"Henry Clark",Department:"IT",Age:27,Salary:77000,HireDate:ISODate("2022-01-25T00:00:00Z"),Status:"Active"},
+{EmployeeId:209,Name:"Ivy Tuner",Department:"Finance",Age:33,Salary:80000,HireDate:ISODate("2021-03-12T00:00:00Z"),Status:"Active"},
+{EmployeeId:210,Name:"jack Miller",Department:"Marketing",Age:36,Salary:73000,HireDate:ISODate("2018-11-20T00:00:00Z"),Status:"Active"}
+])
+4. db.Employees.find()
+5. db.Employees.find({Name : "Alice Brown"})
+6. db.Employees.find({Department : "IT"})
+7. db.Employees.find({Age : { $gt : 30 } })
+8. db.Employees.find({Salary : { $gt : 75000 } })
+9. db.Employees.find({HireDate : { $gt : ISODate(“2019-01-01T00:00:00Z”) , $lt : ISODate(“2021-12-31T00:00:00Z”)}})
+10. db.Employees.find({Name : /^A/ })
+11. db.Employees.find({Department : {$ne: "IT"} })
+Exercise 2
+1. use OnlineStoreDB
+2. db.createCollection("Products””)
+3. db.Products.insertOne({
+ProductID:301,
+ProductName:”Laptop”,
+Category:”Electronics”,
+Price:1200.00,
+Stock:15,
+Rating:4.5,
+AddedDate: ISODate(“2024-02-01T00:00:00Z”)
+})
+4. db.Products.insertMany([
+{ProductId: 302, ProductName: "Smartphone", Category: "Electronics", Price: 699.99, Stock: 25, Rating: 4.7, AddedDate: ISODate("2024-02-05T00:00:00Z")},
+{ProductId: 303, ProductName: "Headphone", Category: "Accessories", Price: 49.99, Stock: 50, Rating: 4.3, AddedDate: ISODate("2024-02-10T00:00:00Z")},
+{ProductId: 304, ProductName: "Monitor", Category: "Electronics", Price: 250.00, Stock: 10, Rating: 4.6, AddedDate: ISODate("2024-02-15T00:00:00Z")},
+{ProductId: 305, ProductName: "Keyboard", Category: "Accessories", Price: 79.99, Stock: 30, Rating: 4.2, AddedDate: ISODate("2024-02-20T00:00:00Z")},
+{ProductId: 306, ProductName: "Mouse", Category: "Accessories", Price: 29.99, Stock: 45, Rating: 4.1, AddedDate: ISODate("2024-02-25T00:00:00Z")},
+{ProductId: 307, ProductName: "Tablet", Category: "Electronics", Price: 499.99, Stock: 20, Rating: 4.4, AddedDate: ISODate("2024-03-01T00:00:00Z")},
+{ProductId: 308, ProductName: "Smartwatch", Category: "Wearable Tech", Price: 199.99, Stock: 18, Rating: 4.5, AddedDate: ISODate("2024-03-05T00:00:00Z")},
+{ProductId: 309, ProductName: "Wireless Earbuds", Category: "Accessories", Price: 99.99, Stock: 35, Rating: 4.3, AddedDate: ISODate("2024-03-10T00:00:00Z")},
+{ProductId: 310, ProductName: "Gaming Chair", Category: "Furniture", Price: 250.00, Stock: 12, Rating: 4.6, AddedDate: ISODate("2024-03-15T00:00:00Z")}
+])
+5. db.Products.find()
+6. db.Products.find({ ProductName : ”Tablet” })
+7. db.Products.find({ Category : ”Electronics” })
+8. db.Products.find({ Price : {$gt : 500 } })
+9. db.Products.find({ Stock : {$lt : 20 } })
+10. db.Products.find({ $or: [ {Rating: 4.5} , {Rating: {$gt:4.5} } ] })
+11. db.Products.find({ $or: [ { Category : ”Accessories” } , { Category : ”Wearable Teche” } ] })
+or
+db.Products.find({Category: { $in: ["Accessories","Wearable Tech"] } })
+12. db.Products.find().sort( {Price:-1} )
+13. db.Products.find({ AddedDate: {$gt: ISODate(“2024-02-10T00:00:00Z”)} })
+14. db.Products.find({ Price : {$gt : 50 , $lt : 250 } })
+15. db.Products.find({ ProductName : /^S/ })
+16. db.Products.find().sort( {Price:-1} ) .limit(3)
+
+********************************************************************************************************
+Lab 2
+Exercise 01
+1. use LibraryDB
+2. db.createCollection(“Books”)
+3. db.Books.insertMany([
+{BookId:301,Title:"The Great Gatsby",Author:"F.Scott Fitzgerald",Genre:"Fiction",PublishedYear:1925,CopiesAvailable:3,TotalCopies:5,Status:"Available"},
+{BookId:302,Title:"To Kill a Mockingbird",Author:"Harper Lee",Genre:"Fiction",PublishedYear:1960,CopiesAvailable:1,TotalCopies:4,Status:"Available"},
+{BookId:303,Title:"1984",Author:"George Orwell",Genre:"Dystopian",PublishedYear:1949,CopiesAvailable:0,TotalCopies:6,Status:"Borrowed"},
+{BookId:304,Title:"The Catcher in the Rye",Author:"J.D.Salinger",Genre:"Fiction",PublishedYear:1951,CopiesAvailable:2,TotalCopies:3,Status:"Available"},
+{BookId:305,Title:"Moby-Dick",Author:"Herman Melville",Genre:"Adventure",PublishedYear:1851,CopiesAvailable:5,TotalCopies:5,Status:"Available"},
+{BookId:306,Title:"Pride and Prejudice",Author:"Jane Austen",Genre:"Romance",PublishedYear:1813,CopiesAvailable:1,TotalCopies:4,Status:"Available"},
+{BookId:307,Title:"The Hobbit",Author:"J.R.R.Tolkien",Genre:"Fantasy",PublishedYear:1937,CopiesAvailable:0,TotalCopies:7,Status:"Borrowed"},
+{BookId:308,Title:"War and Peace",Author:"Leo Tolstory",Genre:"Historical",PublishedYear:1869,CopiesAvailable:2,TotalCopies:5,Status:"Available"},
+{BookId:309,Title:"Hamlet",Author:"William Shakespeare",Genre:"Drama",PublishedYear:1603,CopiesAvailable:4,TotalCopies:6,Status:"Available"},
+{BookId:310,Title:"Crime and Punishment",Author:"Fyodor Dostoevsky",Genre:"Crime",PublishedYear:1866,CopiesAvailable:4,TotalCopies:5,Status:"Available"}
+])
+4. Increase the total copies of "1984" by 2 and adjust available copies accordingly
+db.Books.updateOne(
+{Title:”1984”},
+{$inc : { TotalCopies:2 , CopiesAvailable:2 } }
+)
+5. Mark "Pride and Prejudice" as "Reserved" if copies available are less than 2.
+db.Books.updateOne(
+{Title : ” Pride and Prejudice” , CopiesAvailable: { $lt:2 } },
+{$set : {Status:”Reserved”} }
+)
+6.Update all books published before 1900 to have a new field "Classic": true.
+ db.Books.updateMany(
+{PublishedYear : { $lt : 1900 } }, {$set : {Classic : “true”} }
+)
+7.Change the genre of "The Hobbit" to "Epic Fantasy".
+ db.Books.updateOne(
+{Title : “The Hobbit”},
+{$set : {Genre:”Epic Fantasy”}}
+)
+8.Add a "LastBorrowedDate" field to books that are currently borrowed (set a sample date).
+ db.Books.updateMany(
+{Status:”Borrowed”},
+{$set : {LastBorrowedDate: ISODate(“2025-01-21T00:00:00Z”)} }
+)
+9.Delete all books where TotalCopies is less than 3 (outdated books removal).
+ db.Books.deleteMany(
+{ TotalCopies : { $lt : 3 } }
+)
+10.Remove the "Crime and Punishment" book from the database.
+ db.Books.deleteOne({ Title: “Crime and Punishment” })
+11.Remove the "Classic" field from books published after 1900 (to correct the dataset).
+ db.Books.updateMany(
+{PublishedYear : { $lt : 1900 } },
+{$unset : {Classic : “”} }
+)
+12.Delete books that have been borrowed but have 0 total copies left.
+ db.Books.deleteMany( { Status:”Borrowed” , TotalCopies: 0 } )’
+Example data
+{StudentId:101,Name:"Emma Johnson",Age:14,Grade:9,Section:"A",Marks:85,EntrollmentDate:ISODate("2021-06-10T00:00:00Z"),Status:"Active"},
+{StudentId:102,Name:"Liam Smith",Age:15,Grade:10,Section:"B",Marks:90,EntrollmentDate:ISODate("2020-09-12T00:00:00Z"),Status:"Active"},
+{StudentId:103,Name:"Olivia Brown",Age:13,Grade:8,Section:"A",Marks:88,EntrollmentDate:ISODate("2022-02-15T00:00:00Z"),Status:"Active"},
+{StudentId:104,Name:"Noah Wilson",Age:16,Grade:11,Section:"C",Marks:75,EntrollmentDate:ISODate("2019-07-20T00:00:00Z"),Status:"Graduated"},
+{StudentId:105,Name:"Ava Miller",Age:14,Grade:9,Section:"B",Marks:92,EntrollmentDate:ISODate("2021-01-18T00:00:00Z"),Status:"Active"},
+{StudentId:106,Name:"James White",Age:17,Grade:12,Section:"C",Marks:80,EntrollmentDate:ISODate("2018-05-25T00:00:00Z"),Status:"Graduated"},
+{StudentId:107,Name:"Charlotte Lee",Age:15,Grade:10,Section:"A",Marks:87,EntrollmentDate:ISODate("2020-08-30T00:00:00Z"),Status:"Active"},
+{StudentId:108,Name:"Ethan Clark",Age:16,Grade:11,Section:"B",Marks:78,EntrollmentDate:ISODate("2019-09-10T00:00:00Z"),Status:"Active"},
+{StudentId:109,Name:"Mia Walker",Age:13,Grade:8,Section:"C",Marks:89,EntrollmentDate:ISODate("2022-03-11T00:00:00Z"),Status:"Active"},
+{StudentId:110,Name:"Henry Adams",Age:17,Grade:12,Section:"A",Marks:82,EntrollmentDate:ISODate("2018-04-05T00:00:00Z"),Status:"Graduated"}
+
+**************************************************************************************************
+Lab 5
+Exercise 01
+Already did in lab 4
+Exercise 02
+1. use SupermarketDB
+2. db.createCollection(“Products”)
+3. db.Products.insertMany([
+{productid:101,Name:"Apple",Category:"Fruits",Price:1.50,Stock:100,Supplier:"Fresh Farms",ExpiryDate:ISODate("2025-06-20T00:00:00Z"),Discount:5,Availability:"In Stock"},
+{productid:102,Name:"Orange Juice",Category:"Beverages",Price:3.00,Stock:50,Supplier:"Nature's Best",ExpiryDate:ISODate("2024-12-10T00:00:00Z"),Discount:10,Availability:"In Stock"},
+{productid:103,Name:"Rice",Category:"Grains",Price:12.00,Stock:40,Supplier:"Agro Supplies",ExpiryDate:ISODate("2026-01-01T00:00:00Z"),Discount:0,Availability:"In Stock"},
+{productid:104,Name:"Chicken Breast",Category:"Meat",Price:8.50,Stock:20,Supplier:"Farm Fresh",ExpiryDate:ISODate("2024-11-15T00:00:00Z"),Discount:15,Availability:"In Stock"},
+{productid:105,Name:"Whole Wheat Bread",Category:"Bakery",Price:2.50,Stock:60,Supplier:"Baked Goods",ExpiryDate:ISODate("2024-09-05T00:00:00Z"),Discount:5,Availability:"In Stock"},
+{productid:106,Name:"Milk",Category:"Dairy",Price:2.00,Stock:80,Supplier:"Dairy Fresh",ExpiryDate:ISODate("2024-08-20T00:00:00Z"),Discount:0,Availability:"In Stock"},
+{productid:107,Name:"Olive Oil",Category:"Cooking Oil",Price:10.00,Stock:30,Supplier:"Health Foods",ExpiryDate:ISODate("2026-05-15T00:00:00Z"),Discount:5,Availability:"In Stock"},
+{productid:108,Name:"Chocolate Bar",Category:"Snacks",Price:1.20,Stock:200,Supplier:"Sweet Treats",ExpiryDate:ISODate("2025-02-18T00:00:00Z"),Discount:20,Availability:"In Stock"},
+{productid:109,Name:"Cereal Box",Category:"Breakfats",Price:4.50,Stock:90,Supplier:"Healthy Start",ExpiryDate:ISODate("2025-03-22T00:00:00Z"),Discount:10,Availability:"In Stock"},
+{productid:110,Name:"Eggs",Category:"Dairy",Price:3.50,Stock:70,Supplier:"Farm Fresh",ExpiryDate:ISODate("2024-07-30T00:00:00Z"),Discount:0,Availability:"In Stock"}
+])
+4. db.Products.find()
+5. db.Products.find({ Name: “Olive Oil” })
+6. db.Products.find({ Category: “Dairy” })
+7. db.Products.find({ Price: { $gt: 5 } })
+8. db.Products.find({ Discount: { $gt: 10 } })
+9. db.Products.find({ Stock: { $lt: 50 } })
+10. db.Products.find({ ExpiryDate : {$lt : 2024-12-31T00:00:00Z} })
+11. db.Products.find({Supplier: “Farm Fresh” })
+12. db.Products.find({ Name: /^C/ })
+13.
+Increase the price of "Apple" by $0.50.
+db.Products.updateOne(
+{Name:”Apple”}, //condition (where to update)
+{$inc : {Price: 0.50 } } //update part
+)
+If we want to decrease the price,
+{ $inc : { Price: - 0.50 } }
+14.Update all products in the "Bakery" category to include "Gluten-Free": false.
+ db.Products.updateMany(
+{Category:”Bakery”},
+{$set : { Gluten_Free : ”false” } }
+)
+15.Set "Availability": "Out of Stock" for products with stock quantity less than 20
+ db.Products.updateMany(
+{Stock : { $lt : 20 }},
+{ $set : {Availability : “out of stock”} }
+)
+16.Apply an extra 5% discount to products in the "Snacks" category
+ db.Products.updateOne(
+{Category: “Snacks”},
+{ $inc : {Discount : 5} }
+)
+17.Change the supplier of "Milk (1L)" to "Dairy Best".
+ db.Products.updateOne(
+{Name: “Milk”},
+{ $set : {Supplier : “Dairy Best” } }
+)
+18. Add a "Rating" field with a default value of 4.0 for all products.
+db.Products.updateMany(
+{},
+{ $set : {Rating : 4.0 } }
+)
+19.Remove all products that have expired (ExpiryDate before today).
+ db.Products.deleteMany(
+{ ExpiryDate : { $lt : ISODate(“2025-02-18T00:00:00Z”) } }
+)
+20.Delete the "Chocolate Bar" product from the collection
+ db.Products.deleteOne( { Name: “Chocolate Bar”} )
+21.Remove the "Discount" field from all products in the "Grains" category.
+ db.Products.updateMany(
+{Category:””Grains”},
+{$unset : { Discount : “”} }
+)
+
+***************************************************************************************************
+Lab 9
+Example
+use CompanyData
+db.createCollection(“inventory”)
+db.inventory.insertMany([
+{ Item: "Note Book", Quantity: 25, Status: "A", Category: "Stationery", Supplier: "ABC Traders", Price: 45.00, Location: "Shelf-A" },
+{ Item: "Journal", Quantity: 50, Status: "B", Category: "Stationery", Supplier: "XYZ Ltd", Price: 85.00, Location: "Shelf-B" },
+{ Item: "Paper", Quantity: 100, Status: "A", Category: "Office Use", Supplier: "ABC Traders", Price: 15.00, Location: "Shelf-C" },
+{ Item: "Article", Quantity: 36, Status: "C", Category: "Educational", Supplier: "LearnFast", Price: 120.00, Location: "Shelf-A" },
+{ Item: "Post Card", Quantity: 81, Status: "D", Category: "Gifting", Supplier: "PrintMate", Price: 25.00, Location: "Shelf-B" },
+{ Item: "Pen", Quantity: 60, Status: "A", Category: "Stationery", Supplier: "ABC Traders", Price: 10.00, Location: "Shelf-C" },
+{ Item: "Eraser", Quantity: 20, Status: "A", Category: "Stationery", Supplier: "XYZ Ltd", Price: 5.00, Location: "Shelf-A" },
+{ Item: "Marker", Quantity: 75, Status: "B", Category: "Office Use", Supplier: "WriteIt", Price: 30.00, Location: "Shelf-D" },
+{ Item: "File", Quantity: 90, Status: "B", Category: "Office Use", Supplier: "ABC Traders", Price: 55.00, Location: "Shelf-E" },
+{ Item: "Ruler", Quantity: 10, Status: "A", Category: "Stationery", Supplier: "Tools & Co", Price: 8.00, Location: "Shelf-A" },
+{ Item: "Envelope", Quantity: 45, Status: "C", Category: "Mailing", Supplier: "XYZ Ltd", Price: 20.00, Location: "Shelf-B" },
+{ Item: "Highlighter", Quantity: 55, Status: "A", Category: "Stationery", Supplier: "LearnFast", Price: 28.00, Location: "Shelf-C" }
+])
+1.Select all the documents in the inventory collection where the status equals “A”.
+ db.inventory.find({Status:"A"})
+2.Return all the documents where the quantity is less than 30.
+ db.inventory.find({Quantity:{$lt:30}})
+3.Return all the documents where the status equals “A” and quantity is less than 30.
+ db.inventory.find( { $and: [ {Status:"A"} , {Quantity:{$lt:30}} ]})
+4.Select all the documents where the quantity is greater than 50 and the item is Post Card
+ db.inventory.find({ $and : [ {Quantity:{$gt:50}} , { Item:"Post Card"} ] })
+5.Select the documents where the quantity is not equal to 100.
+ db.inventory.find({Quantity:{$ne:100}})
+6.Select the documents where either status is “A” or the quantity is not greater than 70.
+ db.inventory.find({$or:[{Quantity:{$lte:70}},{Status:"A"}]})
+Exercise
+use LibraryDB
+db.createCollection('libraryBooks')
+db.libraryBooks.insertMany([
+{ BookID: "B001", Title: "Introduction to Databases", Author: "C.J. Date", Category: "Database", Copies: 5, PublishedYear: 2018, Status: "Available" },
+{ BookID: "B002", Title: "Learning Python", Author: "Mark Lutz", Category: "Programming", Copies: 2, PublishedYear: 2019, Status: "Borrowed" },
+{ BookID: "B003", Title: "MongoDB Basics", Author: "Kristina Chodorow", Category: "Database", Copies: 8, PublishedYear: 2020, Status: "Available" },
+{ BookID: "B004", Title: "Clean Code", Author: "Robert C. Martin", Category: "Programming", Copies: 4, PublishedYear: 2008, Status: "Available" },
+{ BookID: "B005", Title: "Web Development Handbook", Author: "Jon Duckett", Category: "Web", Copies: 3, PublishedYear: 2017, Status: "Borrowed" },
+{ BookID: "B006", Title: "JavaScript: The Good Parts", Author: "Douglas Crockford", Category: "Web", Copies: 7, PublishedYear: 2009, Status: "Available" },
+{ BookID: "B007", Title: "React Up & Running", Author: "Stoyan Stefanov", Category: "Web", Copies: 1, PublishedYear: 2021, Status: "Borrowed" },
+{ BookID: "B008", Title: "Advanced Java", Author: "Herbert Schildt", Category: "Programming", Copies: 6, PublishedYear: 2016, Status: "Available" },
+{ BookID: "B009", Title: "Cloud Computing Concepts", Author: "Rajkumar Buyya", Category: "Cloud", Copies: 4, PublishedYear: 2022, Status: "Borrowed" },
+{ BookID: "B010", Title: "Node.js in Action", Author: "Mike Cantelon", Category: "Programming", Copies: 3, PublishedYear: 2015, Status: "Available" },
+{ BookID: "B011", Title: "Fundamentals of AI", Author: "Stuart Russell", Category: "AI", Copies: 2, PublishedYear: 2020, Status: "Available" },
+{ BookID: "B012", Title: "Machine Learning Basics", Author: "Tom Mitchell", Category: "AI", Copies: 5, PublishedYear: 2021, Status: "Borrowed" }
+])
+1. db.b.find({Category:"Programming"})
+2. Return all books that have fewer than 4 copies.
+db.b.find({Copies:{$lt:4}})
+3.Select all books that are "Available" and published after 2015.
+ db.b.find({$and:[{Status:"Available"},{PublishedYear:{$gt:2015}}]})
+4. Find all books with the word "Basics" in the title.
+db.b.find({Title:/Basics/})
+or
+db.b.find({Title:/Basics/i})  to ignore case sensitive (basics , Basics)
+5.Return books that were published before 2010 or have more than 5 copies.
+ db.b.find({ $or: [ { PublishedYear: { $lt: 2010 } }, { Copies: { $gt: 5 } }] })
+6.Select books where the category is not "Web".
+ db.b.find({Category:{$ne:"Web"}})
+7.Return books where the author is either “Mark Lutz” or “Robert C. Martin”.
+ db.b.find( {Author: {$in:["Mark Lutz","Robert C. Martin"]}})
+or
+db.b.find({ $or: [ {Author:"Mark Lutz"}, {Author:"Robert C. Martin"}] })
+8.Find all books with "Borrowed" status and fewer than 3 copies. db.b.find({$and:[{Status:"Borrowed"},{Copies:{$lt:3}}]})
+9.Return all books with PublishedYear between 2016 and 2020 (inclusive).
+ db.b.find({PublishedYear:{$gte:2016,$lte:2020}})
+
+*******************************************************************************************
+Lab 10
+Example
+Check mongoimport installed
+mongoimport --version
+Go to the folder which contain the json files  open cmd in that folder
+mongoimport --jsonArray --db CarSalesDB --collection cars --file cars.json
+Db name  CarSalesDB
+collection name  cars
+file name  cars.json
+a) use mydb
+db.myCollection.find({brand:"Toyota"})
+or
+db.myCollection.aggregate([ {$match:{brand:"Toyota"} }])
+b) db.myCollection.find({price:{$gt:30000}})
+or
+db.myCollection.aggregate([ { $match: { price: { $gt: 30000 } } }] )
+c) db.myCollection.find({},{car_id:1,brand:1,price:1}).sort({price:-1})\
+or
+db.myCollection.aggregate([ {$group:{_id:{id:"$car_id",brand:"$brand",price:"$price"}}} , {$sort:{"_id.price":-1} }])
+d) db.myCollection.find({sold_date:{$gt:'2024-07-01'}})
+or
+db.myCollection.aggregate([ { $match: { sold_date: { $gt: '2024-07-01' } } }] )
+e) Count how many cars were sold by each brand. ($group)
+db.myCollection.aggregate([ {$group:{_id:"$brand",count:{$sum:1}}} ])
+f)Find the total revenue from car sales.
+ db.myCollection.aggregate([ { $group: { _id: null , totalRevenue: { $sum: '$price' } } }] )
+g) Project only the brand, model, and sold_date for all documents
+db.myCollection.aggregate([ { $project: { _id: { brand: "$brand", model: '$model', sold_date: '$sold_date' } } }] )
+h) Use $match and $group to find the total price of Toyota cars sold.
+db.myCollection.aggregate([ {$match:{ brand: 'Toyota'}}, {$group:{_id:null,totalPrice:{$sum:'$price'}}} ])

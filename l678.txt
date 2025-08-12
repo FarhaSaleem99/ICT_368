@@ -1,0 +1,234 @@
+Lab 6
+Exercise
+use pizza
+db.createCollection(“order”)
+db.order.insertMany([
+{Order_id:"O001",Pizza_name:"Margherita",Size:"Medium",Quantity:2,Order_date:ISODate("2021-06-15T00:00:00Z")},
+{Order_id:"O002",Pizza_name:"Pepperoni",Size:"Large",Quantity:1,Order_date:ISODate("2021-08-20T00:00:00Z")},
+{Order_id:"O003",Pizza_name:"BBQ Chicken",Size:"Medium",Quantity:3,Order_date:ISODate("2022-01-12T00:00:00Z")},
+{Order_id:"O004",Pizza_name:"Veggie",Size:"Small",Quantity:5,Order_date:ISODate("2020-11-10T00:00:00Z")},
+{Order_id:"O005",Pizza_name:"Margherita",Size:"Medium",Quantity:2,Order_date:ISODate("2020-12-02T00:00:00Z")},
+{Order_id:"O006",Pizza_name:"Pepperoni",Size:"Medium",Quantity:4,Order_date:ISODate("2021-06-18T00:00:00Z")},
+{Order_id:"O007",Pizza_name:"Hawaiian",Size:"Medium",Quantity:1,Order_date:ISODate("2021-07-22T00:00:00Z")},
+{Order_id:"O008",Pizza_name:"BBQ Chicken",Size:"Large",Quantity:3,Order_date:ISODate("2022-01-05T00:00:00Z")},
+{Order_id:"O009",Pizza_name:"Margherita",Size:"Medium",Quantity:3,Order_date:ISODate("2022-02-01T00:00:00Z")},
+{Order_id:"O010",Pizza_name:"Veggie",Size:"Medium",Quantity:2,Order_date:ISODate("2021-10-15T00:00:00Z")}
+])
+1. Filter the pizza order documents to pizzas with a size of medium.
+db.order.aggregate([
+{$match:{Size:'Medium'}},
+])
+2.Returns the total order quantity of medium size pizza grouped by pizza name. 
+db.order.aggregate([
+{$match:{Size:'Medium'}},
+{$group:{ _id:'$Pizza_name', total:{$sum:'$Quantity'}}}
+])
+3.Filter pizza order documents by date range (2020-01-30 – 2022-01-03).
+db.order.aggregate([
+{ $match: {Order_date: {$gt: ISODate("2020-01-30T00:00:00Z") , $lt: ISODate("2022-01-03T00:00:00Z") } } }
+])
+4. Display the total quantity of each pizza ordered, grouped by pizza name.
+db.order.aggregate([
+{ $group: { _id: '$Pizza_name', total: { $sum: 'Quantity' } } }
+] )
+5. Find the total quantity of medium and large pizzas ordered separately.
+db.order.aggregate([
+{$group: {_id : '$Size', totalQuantity : {$sum : '$Quantity'} } }
+])
+6.Find the pizza that has been ordered the most (the one with the highest total quantity).
+ db.order.aggregate([
+{ $group : { _id: '$Pizza_name' , TotalQuantity:{$sum: '$Quantity' }}},
+{ $sort : {TotalQuantity : -1}},
+{ $limit : 1}
+])
+7. Find the total quantity of pizzas ordered from 2021-01-01 to 2021-12-31.
+db.order.aggregate([
+{$match : {Order_date : {$gt :ISODate('2021-01-01T00:00:00Z') ,$lt : ISODate('2021-12-31T00:00:00Z') } } },
+{$group : {_id:null , TotalQuantity:{ $sum : '$Quantity'} } }
+])
+Lab 7
+Use ecommerceDB
+db.createCollection('orders')
+db. orders.insertMany([
+{Order_ID:'O001',CustomerName:"Alice", Product:"Phone",Category:"Electronics",Quantity:2,Price:550,OrderDate:ISODate("2022-01-05T00:00:00Z")},
+{Order_ID:'O002',CustomerName:"Bob", Product:"Laptop",Category:"Electronics",Quantity:1,Price:1200,OrderDate:ISODate("2022-01-10T00:00:00Z")},
+{Order_ID:'O003',CustomerName:"Alice", Product:"Headphone",Category:"Electronics",Quantity:3,Price:50,OrderDate:ISODate("2022-01-15T00:00:00Z")},
+{Order_ID:'O004',CustomerName:"David", Product:"T-shirt",Category:"Fashion",Quantity:4,Price:20,OrderDate:ISODate("2022-01-16T00:00:00Z")},
+{Order_ID:'O005',CustomerName:"Eva", Product:"Shoes",Category:"Fashion",Quantity:1,Price:80,OrderDate:ISODate("2022-02-01T00:00:00Z")},
+{Order_ID:'O006',CustomerName:"Frank", Product:"Book",Category:"Books",Quantity:5,Price:15,OrderDate:ISODate("2022-02-10T00:00:00Z")},
+{Order_ID:'O007',CustomerName:"George", Product:"Phone",Category:"Electronics",Quantity:1,Price:550,OrderDate:ISODate("2022-02-11T00:00:00Z")},
+{Order_ID:'O008',CustomerName:"Alice", Product:"Book",Category:"Books",Quantity:2,Price:15,OrderDate:ISODate("2022-02-15T00:00:00Z")},
+{Order_ID:'O009',CustomerName:"Henry", Product:"T-shirt",Category:"Fashion",Quantity:2,Price:20,OrderDate:ISODate("2022-03-01T00:00:00Z")},
+{Order_ID:'O010',CustomerName:"David", Product:"Laptop",Category:"Electronics",Quantity:1,Price:1200,OrderDate:ISODate("2022-03-02T00:00:00Z")},
+{Order_ID:'O011',CustomerName:"Alice", Product:"Shoes",Category:"Fashion",Quantity:1,Price:80,OrderDate:ISODate("2022-03-05T00:00:00Z")},
+{Order_ID:'O012',CustomerName:"Eva", Product:"Phone",Category:"Electronics",Quantity:2,Price:550,OrderDate:ISODate("2022-03-08T00:00:00Z")},
+{Order_ID:'O013',CustomerName:"Bob", Product:"Book",Category:"Books",Quantity:3,Price:15,OrderDate:ISODate("2022-03-10T00:00:00Z")},
+{Order_ID:'O014',CustomerName:"Henry", Product:"Headphones",Category:"Electronics",Quantity:2,Price:50,OrderDate:ISODate("2022-03-15T00:00:00Z")},
+{Order_ID:'O015',CustomerName:"George", Product:"Shoes",Category:"Fashion",Quantity:1,Price:80,OrderDate:ISODate("2022-03-20T00:00:00Z")}
+])
+1. Find all orders in the "Electronics" category
+db.orders.aggregate([
+{$match : {Category : 'Electronics' } }
+])
+2.Calculate total revenue (Quantity × Price) from Electronics category
+ db.orders.aggregate([
+{ $match: { Category: 'Electronics' } },
+{ $project: { _id : '$Product', revenue: { $multiply : [ '$Price' , '$Quantity'] } } }
+] )
+3.Group by Category and calculate total revenue per category
+ db.orders.aggregate([
+{$group:{ _id : "$Category" , totalRevenue : {$sum : { $multiply : ["$Quantity","$Price"] }}}}
+])
+4.Sort categories by total revenue in descending order
+ db.orders.aggregate([
+{ $group: { _id: "$Category", totalRevenue: { $sum: { $multiply: ["$Quantity", "$Price"] } } } },
+{$sort:{totalRevenue:-1}}
+] )
+5.Find the highest quantity ordered for any product
+ db.orders.aggregate([
+{ $group: { _id: "$Product", TotalQuantity: { $sum: "$Quantity" } } },
+{ $sort: { TotalQuantity: -1 } },
+{ $limit: 1 }
+] )
+6.Display total quantity of each product ordered by each customer
+ db.orders.aggregate([
+{$group:{_id:["$CustomerName","$Product"],totQuantity:{$sum:"$Quantity"}}}
+])
+7.Find orders placed between 2022-02-01 and 2022-03-01
+ db.orders.aggregate([
+{$match:{OrderDate:{$gt:ISODate('2022-02- 01T00:00:00Z'),$lt:ISODate('2022-03-01T00:00:00Z')}}}
+])
+8. Unwind Product Categories if stored as array (hypothetical) (Assuming Category: ["Fashion", "Men"])
+db.orders.aggregate([
+{$unwind:"$Category"},
+{$group:{_id:"$Category",tot:{$sum:"$Quantity"}}}
+])
+9. Write filtered data into a new collection
+db.orders.aggregate([
+{$match:{Category:"Books"}},
+{$out:"booksOrder"}
+]) → db.booksOrder.find()
+Lab8
+Exercise 01
+use Garment
+1. db.createCollection('garmentOrders')
+db. garmentOrders.insertMany([
+{ OrderID: "G001", CustomerName: "Anu", Product: "T-Shirt", Category: "Tops", Quantity: 3, Price: 20, OrderDate: ISODate('2023-01-10T00:00:00Z') },
+{ OrderID: "G002", CustomerName: "Ravi", Product: "Jeans", Category: "Bottoms", Quantity: 1, Price: 40, OrderDate: ISODate('2023-01-15T00:00:00Z') },
+{ OrderID: "G003", CustomerName: "Sara", Product: "Jacket", Category: "Outerwear", Quantity: 2, Price: 60, OrderDate: ISODate('2023-01-20T00:00:00Z') },
+{ OrderID: "G004", CustomerName: "Anu", Product: "Skirt", Category: "Bottoms", Quantity: 1, Price: 25, OrderDate: ISODate('2023-01-25T00:00:00Z') },
+{ OrderID: "G005", CustomerName: "Nina", Product: "Hoodie", Category: "Outerwear", Quantity: 1, Price: 55, OrderDate: ISODate('2023-02-01T00:00:00Z') },
+{ OrderID: "G006", CustomerName: "Ravi", Product: "Shorts", Category: "Bottoms", Quantity: 2, Price: 30, OrderDate: ISODate('2023-02-10T00:00:00Z') },
+{ OrderID: "G007", CustomerName: "Sara", Product: "Blouse", Category: "Tops", Quantity: 2, Price: 35, OrderDate: ISODate('2023-02-14T00:00:00Z') },
+{ OrderID: "G008", CustomerName: "Nina", Product: "Coat", Category: "Outerwear", Quantity: 1, Price: 90, OrderDate: ISODate('2023-02-20T00:00:00Z') },
+{ OrderID: "G009", CustomerName: "Anu", Product: "Shirt", Category: "Tops", Quantity: 2, Price: 25, OrderDate: ISODate('2023-03-01T00:00:00Z') },
+{ OrderID: "G010", CustomerName: "Ravi", Product: "Skirt", Category: "Bottoms", Quantity: 1, Price: 25, OrderDate: ISODate('2023-03-03T00:00:00Z') },
+{ OrderID: "G011", CustomerName: "Sara", Product: "Jacket", Category: "Outerwear", Quantity: 1, Price: 60, OrderDate: ISODate('2023-03-05T00:00:00Z') },
+{ OrderID: "G012", CustomerName: "Nina", Product: "T-Shirt", Category: "Tops", Quantity: 2, Price: 20, OrderDate: ISODate('2023-03-10T00:00:00Z') }
+])
+2.Show all orders in the "Tops" category
+ db.garmentOrders.aggregate([
+{ $match: {Category:"Tops"} }
+] )
+Or
+db.garmentOrders.find({Category:"Tops"})
+3.Calculate total revenue from each category.
+ db.g.aggregate([
+{ $group: { _id: "$Category", totalRevenue: { $sum: { $multiply: ["$Quantity", "$Price"] } } } }
+] )
+4.Find the highest quantity of any product ordered by a customer.
+ db.garmentOrders.aggregate([
+{ $group: { _id:null, MaxQuantity: { $max: "$Quantity" } } }
+] )
+5. Calculate the total amount spent by each customer.
+db.garmentOrders.garmentOrders..aggregate([
+{$group:{_id:"$CustomerName", TotalAmount:{ $sum: {$multiply:["$Quantity","$Price"]}}}}
+])
+6.Show the average price of products in each category.
+ db.garmentOrders.aggregate([
+{$group:{_id:"$Category",AveragePrice:{$avg:"$Price"}}}
+])
+7. Group by category and count how many products were sold.
+db.garmentOrders.aggregate([
+{ $group: { _id: "$Category", totalSold: { $sum: "$Quantity" } } }
+] )
+8.Sort customers by total amount spent in descending order.
+ db.garmentOrders.aggregate([ { $group: { _id: "$CustomerName", TotalAmount: { $sum: {
+$multiply: ["$Quantity", "$Price"] } } } }, { $sort: { TotalAmount: -1 } }] )
+9. Find all orders placed after February 1, 2023.
+db.garmentOrders.aggregate([ {$match:{OrderDate:{$gt:ISODate("2023-02-01T00:00:00Z")}}
+}])
+10.Group products by category and find the maximum price.
+ db.garmentOrders.aggregate([ { $group: { _id: "$Category", MaxPrice: { $max: "$Price" } } }] )
+11. Save all "Outerwear" orders to a new collection outerwearOrders.
+db.garmentOrders.aggregate([
+{$match:{Category:"Outerwear"}},
+{$out:"outerwearOrders"}
+]) → db.outerwearOrders.find()
+Exercise 02
+use Factory
+1. db.createCollection('factorySupplies')
+db.factorySupplies.insertMany([
+{ SupplyID: "S001", SupplierName: "TexWorld", Material: "Cotton Roll", MaterialType: "Fabric", UnitsSupplied: 100, UnitPrice: 5, SupplyDate: ISODate('2023-01-05T00:00:00Z') },
+{ SupplyID: "S002", SupplierName: "SpinFast", Material: "Zippers", MaterialType: "Accessories", UnitsSupplied: 200, UnitPrice: 0.5, SupplyDate: ISODate('2023-01-10T00:00:00Z') },
+{ SupplyID: "S003", SupplierName: "TexWorld", Material: "Buttons", MaterialType: "Accessories", UnitsSupplied: 500, UnitPrice: 0.2, SupplyDate: ISODate('2023-01-15T00:00:00Z') },
+{ SupplyID: "S004", SupplierName: "ThreadX", Material: "Thread Pack", MaterialType: "Thread", UnitsSupplied: 300, UnitPrice: 1, SupplyDate: ISODate('2023-01-20T00:00:00Z') },
+{ SupplyID: "S005", SupplierName: "Colorify", Material: "Dye Pack", MaterialType: "Dye", UnitsSupplied: 50, UnitPrice: 8, SupplyDate: ISODate('2023-01-25T00:00:00Z') },
+{ SupplyID: "S006", SupplierName: "TexWorld", Material: "Cotton Roll", MaterialType: "Fabric", UnitsSupplied: 150, UnitPrice: 5, SupplyDate: ISODate('2023-02-01T00:00:00Z') },
+{ SupplyID: "S007", SupplierName: "SpinFast", Material: "Zippers", MaterialType: "Accessories", UnitsSupplied: 300, UnitPrice: 0.5, SupplyDate: ISODate('2023-02-05T00:00:00Z') },
+{ SupplyID: "S008", SupplierName: "ThreadX", Material: "Thread Pack", MaterialType: "Thread", UnitsSupplied: 400, UnitPrice: 1, SupplyDate: ISODate('2023-02-15T00:00:00Z') },
+{ SupplyID: "S009", SupplierName: "TexWorld", Material: "Linen Roll", MaterialType: "Fabric", UnitsSupplied: 100, UnitPrice: 6, SupplyDate: ISODate('2023-02-20T00:00:00Z') },
+{ SupplyID: "S010", SupplierName: "Colorify", Material: "Dye Pack", MaterialType: "Dye", UnitsSupplied: 60, UnitPrice: 8, SupplyDate: ISODate('2023-03-01T00:00:00Z') },
+{ SupplyID: "S011", SupplierName: "ThreadX", Material: "Thread Pack", MaterialType: "Thread", UnitsSupplied: 350, UnitPrice: 1, SupplyDate: ISODate('2023-03-05T00:00:00Z') },
+{ SupplyID: "S012", SupplierName: "SpinFast", Material: "Buttons", MaterialType: "Accessories", UnitsSupplied: 400, UnitPrice: 0.2, SupplyDate: ISODate('2023-03-10T00:00:00Z') }
+])
+2. Show all supplies in the "Accessories" material type.
+db.factorySupplies.aggregate([
+{$match:{MaterialType:"Accessories"}}
+])
+3.Calculate total cost (Units × Price) of supplies per material.
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$Material", totalCost: { $sum: { $multiply: ["$UnitsSupplied", "$UnitPrice"] } } } }
+])
+4.Group by SupplierName and find the total number of units supplied.
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$SupplierName", TotalUnits: { $sum: "$UnitsSupplied" } } }
+] )
+5.Find the average unit price for each material type.
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$MaterialType", Average: { $avg: "$UnitPrice" } } }
+] )
+6.List the top 2 materials with the highest total cost
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$Material", TotalCost: { $sum: { $multiply: ["$UnitsSupplied", "$UnitPrice"] } } } },
+{ $sort: { TotalCost: -1 } },
+{ $limit: 2 }
+] )
+7.Count the number of different materials supplied by each supplier.
+ db.factorySupplies.aggregate([
+{$group:{_id : { supplier:"$SupplierName", material:"Material"}}},
+{$group:{_id : "$_id.supplier" , count:{$sum:1}}}
+])
+8.Show all supply records between Jan 20 and Feb 20, 2023.
+ db.factorySupplies.aggregate([
+{ $match: { SupplyDate: { $gt: new Date("2023-01-20"), $lt: new Date("2023-02-20") } } }
+] )
+Or
+db.factorySupplies.aggregate([
+{ $match: { SupplyDate: { $gt: ISODate("2023-01-20T00:00:00Z"), $lt: ISODate("2023-02-
+20T00:00:00Z") } } }
+] )
+9.Group by MaterialType and find the max and min unit prices.
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$MaterialType", min: { $min: "$UnitPrice" }, max:{$max:"$UnitPrice"} } }
+])
+10.Calculate the total cost per supplier and sort by cost descending.
+ db.factorySupplies.aggregate([
+{ $group: { _id: "$SupplierName", total: { $sum: { $multiply: ["$UnitsSupplied", "$UnitPrice"] } } } },
+{ $sort: { total: -1 } }
+] )
+11.Output all “Fabric” supplies into a new collection fabricSupplies.
+ db.factorySupplies.aggregate([
+{$match:{MaterialType:"Fabric"}},
+{$out:"fabricSupplies"}
+]) → db.fabricSupplies.find()

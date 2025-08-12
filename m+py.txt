@@ -1,0 +1,188 @@
+To open jupiter notenook 
+In cmd →  python -m notebook  
+
+!python -m pip install pymongo
+import pymongo
+
+create database collection document
+1.connecct python with mongodb
+client = pymongo.MongoClient('mongodb://localhost:27017/')
+2.create database
+database = client['sample']
+3.create collection
+collection = database['employee']
+4.document creation
+document= {"name":"somename", "age":26}
+5.DICT =>Key+values
+details = {
+"name":"someName",
+"age":24
+}
+print(details)
+print(details['name'])
+6.insert document into that collection
+add = collection.insert_one(document)
+print(add.inserted_id)
+7.insert many documents
+document=[
+ {"name":"somename", "age":26},
+{"name":"somename", "age":26},
+{"name":"somename", "age":26},
+{"name":"somename", "age":26},
+{"name":"somename", "age":26}
+]
+add = collection.insert_many(document)
+print(add.inserted_ids)
+8.select document from mployee collection
+find = collection.find_one()
+print(find)
+9.for doc in collection.find():
+print(doc)
+10.query = {"name":"someName"}
+new_doc = collection.find(query)
+for i in new_doc:
+print(i)
+11.find all documents which Age>27
+query = {"age": {"$gt"27}}
+new_doc = collection.find(query)
+for i in new_doc:
+print(i)
+12.query = {'$or':[{"age":{"$gt":27}},{"faculty":"Technology"}]}
+new_doc = collection.find(query)
+for i in new_doc:
+print(i)
+13.query = collection.find().sort("name")
+for i in query:
+print(i)
+14.query = collection.find().sort("age",-1)
+for i in query:
+print(i)
+15.#delete document
+new_q = {"name": {$regex":"^karuna"}}
+x=collection.delete_one(new_q)
+print(x.deleted_count,"document deleted from collection")
+16.remove_all = collection.delete_many({})
+print(remove_all.deleted_count, "document deleted from collection")
+17.collection.drop()
+18.update operation
+new_query = {"name":"suhail"}
+new_value{"$set":{"name":"razeeth"}}
+collection.update_one(new_query, new_value)
+for i in collection.find():
+print(i)
+
+
+*****************************************************************
+•	Insert data 
+collection.insert_many([ 
+{"product_id": "P001", "name": "Laptop", "category": "Electronics", "price": 120000, "stock": 20},  
+{"product_id": "P002", "name": "Phone", "category": "Electronics", "price": 60000, "stock": 50},  
+{"product_id": "P003", "name": "Book", "category": "Stationery", "price": 1200, "stock": 200},  
+{"product_id": "P004", "name": "Pen", "category": "Stationery", "price": 100, "stock": 500},  
+{"product_id": "P005", "name": "Headphones", "category": "Electronics", "price": 5000, "stock": 80} 
+]) 
+ 
+ 
+ 
+Task 	 	 	 	 	 	we have to give ‘ ’ for all string 
+1.	for p in collection.find(): 
+    print(p) 
+ 
+2.	for p in collection.find({'category':'Electronics'}): 
+    print(p) 
+ 
+3.	for p in collection.find({'price':{'$gt':10000}}): 
+    print(p) 
+ 
+4.	for p in collection.find().sort({'stock':-1}): 
+    print(p) 
+ 
+5.	for p in collection.aggregate([ 
+    {'$group':{'_id':'$category','count':{'$sum':1}}} 
+]): 
+    print(p) 
+ 
+6.	for p in collection.aggregate([ 
+    {'$group':{'_id':'$category','total':{'$sum':'$stock'}}} 
+]): 
+    print(p) 
+ 
+7.	for p in collection.aggregate([ 
+    {'$project':{'_id':{'id':'product_id','Name':'name','Price':'price'}}} 
+]): 
+    print(p) 
+ 
+8.	for p in collection.aggregate([     {'$project': 
+     {'product_id':1,'name':1,'category':1,'price':1,'stock':1, 
+      'stockValue':{'$multiply':['$price','$stock']} 
+     }} ]): 
+    print(p) 
+ 
+9.	for p in collection.aggregate([     {'$project': 
+     {'product_id':1,'name':1,'category':1,'price':1,'stock':1, 
+      'stockValue':{'$multiply':['$price','$stock']} 
+     }}, 
+    {'$sort':{'stockValue':-1}},     {'$limit':1} ]): 
+    print(p) 
+ 
+
+**************************************************************
+node -v
+npm install firebase
+npm install firebase-admin
+in firebase create project->disable and continue->go to web app-> nickname firebase webapp->no any changes continue-> cloud firestore->Create database → no changes →test mode → create
+Project overview →project settings→scroll down→select npm, copy paste in index.js file
+in firebase start collection student->Go to our firebase project →project overview → project settings →service account →Generate private key
+After download rename the file as serviceAccountKey → copy paste the file in vs code →then run→node index.js
+In google search tab → https://firebase.google.com/docs/web/setup#available
+or
+Go to firebase→docs→firebase fundamentals→web→cloud firestore
+console.log(db);
+run node index.js
+index.js
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getFirestore , updateDoc, doc} from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore"; 
+// import { collection, getDocs } from "firebase/firestore"; 
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDNu3H96j7qAyN-Adyy7fnMLhLddHRaOZk",
+  authDomain: "nodefirebaseproject-a71f5.firebaseapp.com",
+  projectId: "nodefirebaseproject-a71f5",
+  storageBucket: "nodefirebaseproject-a71f5.firebasestorage.app",
+  messagingSenderId: "486949666791",
+  appId: "1:486949666791:web:340b117bd61d50cecfc742"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+try {
+    const docRef = await addDoc(collection(db, "student"), {
+      Name: "Hasni",
+      Age: "30",
+      Subject: "Network"
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+
+  const querySnapshot = await getDocs(collection(db, "student"));
+querySnapshot.forEach((doc) => {
+  console.log(`${doc.id} => ${doc.data()}`);
+});
+
+
+const updateRef =doc(db,"student","tSMcWVl4sdAstD2vW5VO");   await updateDoc(updateRef,{     Name:"shamla" 
+});    console.log("Document Updated Successfully"); 
+
+
+await deleteDoc(updateRef);
+console.log("documented deleted successfully");
+//console.log(db);

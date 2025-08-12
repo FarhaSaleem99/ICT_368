@@ -1,0 +1,115 @@
+1. Import dataset
+mongoimport --db bikeDB --collection bikeSales --file bike_sales.json --jsonArray
+2.Find all bikes sold by the brand Honda
+db.bikeSales.find({ brand: "Honda" })
+3. Return brand, model, and price for bikes above 120000
+db.bikeSales.find(
+  { price: { $gt: 120000 } },
+  { _id: 0, brand: 1, model: 1, price: 1 }
+)
+4. Sort all bikes by price in descending order
+db.bikeSales.find().sort({ price: -1 })
+5.Find all TVS bikes sold after 2024-06-30
+db.bikeSales.find({
+  brand: "TVS",
+  sold_date: { $gt: "2024-06-30" }
+})
+6. Count how many bikes were sold by each brand
+db.bikeSales.aggregate([
+  { $group: { _id: "$brand", total_sold: { $sum: 1 } } }
+])
+7.Find the total revenue (sum of all prices)
+db.bikeSales.aggregate([
+  { $group: { _id: null, total_revenue: { $sum: "$price" } } }
+])
+8.Display the average bike price per brand
+db.bikeSales.aggregate([
+  { $group: { _id: "$brand", avg_price: { $avg: "$price" } } }
+])
+9. Return only brand, model, and sold_date
+db.bikeSales.aggregate([
+  { $project: { _id: 0, brand: 1, model: 1, sold_date: 1 } }
+])
+10. Salesperson who sold the most bikes
+db.bikeSales.aggregate([
+  { $group: { _id: "$salesperson", total_sold: { $sum: 1 } } },
+  { $sort: { total_sold: -1 } },
+  { $limit: 1 }
+])
+11.Salesperson total revenue
+db.bikeSales.aggregate([
+  { $group: { _id: "$salesperson", total_revenue: { $sum: "$price" } } }
+])
+12.Bikes sold by Anu, grouped by brand
+db.bikeSales.aggregate([
+  { $match: { salesperson: "Anu" } },
+  { $group: { _id: "$brand", count: { $sum: 1 } } }
+])
+13. Add year_sold from sold_date
+db.bikeSales.aggregate([
+  { $project: {
+      _id: 0,
+      brand: 1,
+      model: 1,
+      sold_date: 1,
+      year_sold: { $year: { $dateFromString: { dateString: "$sold_date" } } }
+  } }
+])
+14. Insert a new bike sale record
+db.bikeSales.insertOne({
+  bike_id: "B008",
+  brand: "KTM",
+  model: "Duke 200",
+  price: 280000,
+  sold_date: "2024-10-01",
+  salesperson: "Ruwan"
+})
+Q2 — Display restaurant_id, name, borough, and ZIP code; exclude _id
+db.restaurant.find(
+  {},
+  { restaurant_id: 1, name: 1, borough: 1, "address.zipcode": 1, _id: 0 }
+)
+Q3 — Display the first 5 restaurants in the borough Bronx
+db.restaurant.find({ borough: "Bronx" }).limit(5)
+Q4 — Find restaurants whose latitude value is less than -95.754168
+
+db.restaurant.find({ "address.coord.1": { $lt: -95.754168 } })
+Q5 — Find restaurant_id, name, borough, cuisine for restaurants whose name starts with "Wil"
+db.restaurant.find(
+  { name: /^Wil/ },
+  { restaurant_id: 1, name: 1, borough: 1, cuisine: 1, _id: 0 }
+)
+Q6 — Find restaurant_id, name, borough, cuisine for restaurants that either:
+prepared dishes except "American" and "Chinese" OR
+
+restaurant name begins with 'Wil'
+db.restaurant.find(
+  {
+    $or: [
+      { cuisine: { $nin: ["American", "Chinese"] } },
+      { name: /^Wil/ }
+    ]
+  },
+  { restaurant_id: 1, name: 1, borough: 1, cuisine: 1, _id: 0 }
+)
+Q7 — Arrange restaurant names in descending order (return all columns)
+db.restaurant.find({}).sort({ name: -1 })
+Q8 — Find name and grades for restaurants which achieved a grade "A" and scored 11 on ISODate "2014-08-11T00:00:00Z"
+db.restaurant.find(
+  {
+    grades: {
+      $elemMatch: {
+        grade: "A",
+        score: 11,
+        date: ISODate("2014-08-11T00:00:00Z")
+      }
+    }
+  },
+  { name: 1, grades: 1, _id: 0 }
+)
+Q9 — Update the cuisine name "Irish" to "xyz"
+db.restaurant.updateMany(
+  { cuisine: "Irish" },
+  { $set: { cuisine: "xyz" } }
+)
+
